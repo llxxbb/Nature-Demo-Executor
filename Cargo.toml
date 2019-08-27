@@ -1,0 +1,17 @@
+[package]
+name = "nature_demo_converter"
+version = "0.1.0"
+authors = ["llxxbb <llxxbb@yeah.net>"]
+edition = "2018"
+workspace = "../Nature"
+
+description = "Demo converter"
+repository = "https://github.com/llxxbb/Nature-Demo-Converter.git"
+license = "MIT"
+
+
+[dependencies]
+nature_common = {path = "../Nature-Common", version="0.0.2"}
+
+[lib]
+crate-type = ["dylib"]
