@@ -22,8 +22,11 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
 #[no_mangle]
 #[allow(unused_attributes)]
 pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
+    dbg!(&para.from.content);
     let payment: Payment = serde_json::from_str(&para.from.content).unwrap();
+    dbg!(&para.last_state);
     let old = para.last_state.as_ref().unwrap();
+    dbg!(&old.content);
     let mut oa: OrderAccount = serde_json::from_str(&old.content).unwrap();
     oa.total_paid += payment.paid;
     oa.diff = oa.total_paid as i32 - oa.receivable as i32;
