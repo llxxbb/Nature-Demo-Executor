@@ -22,20 +22,25 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
 #[no_mangle]
 #[allow(unused_attributes)]
 pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
-    dbg!(&para.from.content);
     let payment: Payment = serde_json::from_str(&para.from.content).unwrap();
-    dbg!(&para.last_state);
     let old = para.last_state.as_ref().unwrap();
-    dbg!(&old.content);
     let mut oa: OrderAccount = serde_json::from_str(&old.content).unwrap();
+    let mut state = String::new();
+    if payment.paid > 0 {
+        state = "partial".to_string();
+    }
     oa.total_paid += payment.paid;
     oa.diff = oa.total_paid as i32 - oa.receivable as i32;
     if oa.diff > 0 {
         oa.total_paid = oa.receivable;
     }
+    if oa.diff == 0 {
+        state = "paid".to_string();
+    }
     oa.last_paid = payment.paid;
     oa.reason = OrderAccountReason::Pay;
     let mut instance = Instance::default();
     instance.content = serde_json::to_string(&oa).unwrap();
+    instance.states.insert(state);
     ConverterReturned::Instances(vec![instance])
 }
