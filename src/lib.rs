@@ -1,5 +1,7 @@
 extern crate serde_json;
 
+use std::thread;
+
 use nature_common::{ConverterParameter, ConverterReturned, Instance};
 use nature_demo_common::{Order, OrderAccount, OrderAccountReason, Payment};
 
@@ -23,7 +25,7 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
 #[allow(unused_attributes)]
 pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     let payment: Payment = serde_json::from_str(&para.from.content).unwrap();
-    if para.last_state.is_none(){
+    if para.last_state.is_none() {
         return ConverterReturned::EnvError;
     }
     let old = para.last_state.as_ref().unwrap();
@@ -47,3 +49,13 @@ pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     instance.states.insert(state);
     ConverterReturned::Instances(vec![instance])
 }
+
+#[no_mangle]
+#[allow(unused_attributes)]
+pub extern fn send_to_stock(para: &ConverterParameter) -> ConverterReturned {
+    thread::spawn(move || warehouse_callback());
+    ConverterReturned::Delay(100)
+}
+
+fn warehouse_callback() {}
+
