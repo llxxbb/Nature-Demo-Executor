@@ -5,6 +5,7 @@ use nature_demo_common::{Order, OrderAccount, OrderAccountReason, Payment};
 
 #[no_mangle]
 #[allow(unused_attributes)]
+#[allow(improper_ctypes)]
 pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
     let order: Order = serde_json::from_str(&para.from.content).unwrap();
     let oa = OrderAccount {
@@ -21,6 +22,7 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
+#[allow(improper_ctypes)]
 pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     let payment: Payment = serde_json::from_str(&para.from.content).unwrap();
     if para.last_state.is_none() {
