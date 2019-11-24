@@ -1,10 +1,12 @@
 extern crate serde_json;
 
-use nature_common::{ConverterParameter, ConverterReturned, Instance};
+use nature_common::{ConverterParameter, ConverterReturned, generate_id, Instance};
 use nature_demo_common::{Order, OrderAccount, OrderAccountReason, Payment};
+use chrono::Local;
 
 #[no_mangle]
 #[allow(unused_attributes)]
+#[allow(improper_ctypes)]
 pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
     let order: Order = serde_json::from_str(&para.from.content).unwrap();
     let oa = OrderAccount {
@@ -21,9 +23,10 @@ pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
 
 #[no_mangle]
 #[allow(unused_attributes)]
+#[allow(improper_ctypes)]
 pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     let payment: Payment = serde_json::from_str(&para.from.content).unwrap();
-    if para.last_state.is_none(){
+    if para.last_state.is_none() {
         return ConverterReturned::EnvError;
     }
     let old = para.last_state.as_ref().unwrap();
@@ -46,4 +49,31 @@ pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
     instance.content = serde_json::to_string(&oa).unwrap();
     instance.states.insert(state);
     ConverterReturned::Instances(vec![instance])
+}
+
+#[no_mangle]
+#[allow(unused_attributes)]
+#[allow(improper_ctypes)]
+pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
+    // "any one" will be correct by Nature after returned
+    let mut ins = Instance::new("any one").unwrap();
+    ins.context.insert("sys.target".to_owned(), para.from.id.to_string());
+    // ... some code to  submit package info to the express company,
+    // ... and wait it to return an id.
+    // the follow line simulate the express company name and the waybill id returned
+    ins.para = "/ems/".to_owned() + &generate_id(&para.master.clone().unwrap().data).unwrap().to_string();
+    // return the waybill
+    ConverterReturned::Instances(vec![ins])
+}
+
+#[no_mangle]
+#[allow(unused_attributes)]
+#[allow(improper_ctypes)]
+pub extern fn auto_sign(para: &ConverterParameter) -> ConverterReturned {
+    // "any one" will be correct by Nature after returned
+    let mut ins = Instance::new("any one").unwrap();
+    ins.context.insert("sys.target".to_owned(), para.from.id.to_string());
+    ins.content= format!("type=auto,time={}", Local::now());
+    // return the waybill
+    ConverterReturned::Instances(vec![ins])
 }
