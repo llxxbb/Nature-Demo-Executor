@@ -19,4 +19,4 @@ nature_common = {path = "../Nature-Common", version="0.0.2"}
 nature_demo_common = {path = "../Nature-Demo-Common", version="0.1.0"}
 
 [lib]
-crate-type = ["dylib"]
+crate-type = ["cdylib"]
