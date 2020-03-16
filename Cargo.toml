@@ -6,7 +6,7 @@ edition = "2018"
 workspace = "../Nature"
 
 description = "Demo converter"
-repository = "https://github.com/llxxbb/Nature-Demo-Executor.git"
+repository = "https://github.com/llxxbb/Nature-Demo-Executor"
 license = "MIT"
 
 
