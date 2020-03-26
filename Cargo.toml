@@ -1,12 +1,12 @@
 [package]
-name = "nature_demo_converter"
-version = "0.0.2"
+name = "nature_demo_executor"
+version = "0.0.3"
 authors = ["XueBin Li <llxxbb@yeah.net>"]
 edition = "2018"
 workspace = "../Nature"
 
 description = "Demo converter"
-repository = "https://github.com/llxxbb/Nature-Demo-Converter.git"
+repository = "https://github.com/llxxbb/Nature-Demo-Executor"
 license = "MIT"
 
 
@@ -15,8 +15,8 @@ serde_json = "1.0"
 serde = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 
-nature_common = {path = "../Nature-Common", version="0.0.2"}
-nature_demo_common = {path = "../Nature-Demo-Common", version="0.0.2"}
+nature_common = {path = "../Nature-Common", version="0.0.3"}
+nature_demo_common = {path = "../Nature-Demo-Common", version="0.0.3"}
 
 [lib]
 crate-type = ["cdylib"]
