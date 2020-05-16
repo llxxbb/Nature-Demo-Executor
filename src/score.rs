@@ -27,9 +27,3 @@ pub extern fn name_to_id(para: &Vec<Instance>) -> Result<Vec<Instance>> {
     Ok(rtn)
 }
 
-#[derive(Deserialize, Serialize, Debug, Default)]
-struct KV {
-    #[allow(dead_code)]
-    pub key: String,
-    pub value: i32,
-}
