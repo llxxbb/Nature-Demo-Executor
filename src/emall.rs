@@ -63,6 +63,16 @@ pub extern fn pay_count(para: &ConverterParameter) -> ConverterReturned {
 #[no_mangle]
 #[allow(unused_attributes)]
 #[allow(improper_ctypes)]
+pub extern fn stock_out_application(para: &ConverterParameter) -> ConverterReturned {
+    // Tn real application need to convert order to store_out_application.
+    // but in this demo, we need not do anything.
+    dbg!(&para.master.as_ref().unwrap().meta);
+    ConverterReturned::None
+}
+
+#[no_mangle]
+#[allow(unused_attributes)]
+#[allow(improper_ctypes)]
 pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
     // "any one" will be correct by Nature after returned
     let mut ins = Instance::new("any one").unwrap();
@@ -88,3 +98,4 @@ pub extern fn auto_sign(para: &ConverterParameter) -> ConverterReturned {
     // return the waybill
     ConverterReturned::Instances(vec![ins])
 }
+
