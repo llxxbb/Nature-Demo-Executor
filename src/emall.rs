@@ -76,13 +76,10 @@ pub extern fn stock_out_application(para: &ConverterParameter) -> ConverterRetur
 pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
     // "any one" will be correct by Nature after returned
     let mut ins = Instance::new("any one").unwrap();
-    ins.id = para.from.id;
     ins.sys_context.insert("target.id".to_owned(), format!("{:x}", para.from.id));
-    // ... some code to  submit package info to the express company,
-    // ... and wait it to return an id.
+    // ... some code to get express info from warehouse system,
     // the follow line simulate the express company name and the waybill id returned
-    let id = generate_id(&para.master.clone().unwrap().data).unwrap();
-    ins.para = "/ems/".to_owned() + &format!("{:x}", id);
+    ins.para = "/ems/".to_owned() + &format!("{:x}", para.from.id);
     // return the waybill
     ConverterReturned::Instances(vec![ins])
 }
