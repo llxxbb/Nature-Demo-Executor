@@ -1,6 +1,6 @@
 use chrono::Local;
 
-use nature_common::{ConverterParameter, ConverterReturned, generate_id, Instance};
+use nature_common::{ConverterParameter, ConverterReturned, Instance};
 use nature_demo_common::{Order, OrderAccount, OrderAccountReason, Payment};
 
 #[no_mangle]
