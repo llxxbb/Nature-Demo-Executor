@@ -86,10 +86,9 @@ pub extern fn go_express(para: &ConverterParameter) -> ConverterReturned {
 #[no_mangle]
 #[allow(unused_attributes)]
 #[allow(improper_ctypes)]
-pub extern fn auto_sign(para: &ConverterParameter) -> ConverterReturned {
+pub extern fn auto_sign(_para: &ConverterParameter) -> ConverterReturned {
     // "any one" will be correct by Nature after returned
     let mut ins = Instance::new("any one").unwrap();
-    ins.sys_context.insert("target.id".to_owned(), format!("{:x}", para.from.id));
     ins.content = format!("type=auto,time={}", Local::now());
     // return the waybill
     ConverterReturned::Instances(vec![ins])
