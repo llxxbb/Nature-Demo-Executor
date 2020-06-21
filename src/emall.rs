@@ -94,3 +94,19 @@ pub extern fn auto_sign(_para: &ConverterParameter) -> ConverterReturned {
     ConverterReturned::Instances(vec![ins])
 }
 
+#[no_mangle]
+#[allow(unused_attributes)]
+#[allow(improper_ctypes)]
+pub extern fn multi_delivery(para: &ConverterParameter) -> ConverterReturned {
+    let para:&str = &para.from.para;
+    let mut ins = Instance::new("abc").unwrap();
+    ins.para = match para {
+        "/A/B" => "/B/C".to_string(),
+        "/B/C" => "/C/D".to_string(),
+        "/C/D" => "error".to_string(),
+        _ => "err2".to_string()
+    };
+    // return the waybill
+    ConverterReturned::Instances(vec![ins])
+}
+
