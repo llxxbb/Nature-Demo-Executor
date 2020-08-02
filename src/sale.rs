@@ -4,9 +4,34 @@ use nature_demo_common::Order;
 #[no_mangle]
 #[allow(unused_attributes)]
 #[allow(improper_ctypes)]
-pub extern fn item_statistics(para: &ConverterParameter) -> ConverterReturned {
+pub extern fn order_to_item(para: &ConverterParameter) -> ConverterReturned {
     dbg!(&para.from.content);
-    ConverterReturned::Instances(vec![])
+    let order: Order = match serde_json::from_str(&para.from.content) {
+        Ok(ord) => ord,
+        Err(e) => {
+            dbg!(&e);
+            return ConverterReturned::LogicalError(e.to_string());
+        }
+    };
+    let money = "B:sale/item/money:1";
+    let count = "B:sale/item/count:1";
+    let mut content: Vec<(String, String, u64)> = vec![];
+    let oid = format!("/{:x}", para.from.id);
+    for one in order.items {
+        let para = one.item.id.to_string() + &oid;
+        content.push((money.to_string(), para.to_string(), one.num as u64 * one.item.price));
+        content.push((count.to_string(), para, one.num as u64));
+    }
+
+    let rtn: Vec<Instance> = content.iter().map(|one| {
+        let mut ins = Instance::default();
+        ins.para = one.1.to_string();
+        ins.meta = one.0.to_string();
+        ins.content = one.2.to_string();
+        ins
+    }).collect();
+
+    ConverterReturned::Instances(rtn)
 }
 
 #[no_mangle]
