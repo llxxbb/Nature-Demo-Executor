@@ -9,8 +9,9 @@ use nature_demo_common::{Order, OrderAccount, OrderAccountReason, Payment};
 pub extern fn order_receivable(para: &ConverterParameter) -> ConverterReturned {
     let result = serde_json::from_str(&para.from.content);
     if result.is_err() {
-        dbg!(&para.from.content);
-        return ConverterReturned::LogicalError("unknown content".to_string());
+        let msg = format!("generate order receivable error: {}, data: {}", result.err().unwrap(), para.from.content);
+        dbg!(&msg);
+        return ConverterReturned::LogicalError(msg);
     }
     let order: Order = result.unwrap();
     let oa = OrderAccount {
@@ -98,7 +99,7 @@ pub extern fn auto_sign(_para: &ConverterParameter) -> ConverterReturned {
 #[allow(unused_attributes)]
 #[allow(improper_ctypes)]
 pub extern fn multi_delivery(para: &ConverterParameter) -> ConverterReturned {
-    let para:&str = &para.from.para;
+    let para: &str = &para.from.para;
     let mut ins = Instance::new("abc").unwrap();
     ins.para = match para {
         "A/B" => "B/C".to_string(),
